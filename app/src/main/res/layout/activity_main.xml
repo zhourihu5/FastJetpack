@@ -19,13 +19,6 @@
             android:text="第二个页面" />
 
         <Button
-            android:id="@+id/btn_test"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:text="Test" />
-
-        <Button
             android:id="@+id/btn_net_with_loading"
             android:layout_width="match_parent"
             android:layout_height="50dp"
