@@ -51,7 +51,12 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
                 mBinding.tvContent.text = data?.toString()
             }
 
+            onFailed {
+                Log.i("wutao--> ", "后台返回的errorCode: $it")
+            }
+
             onException {
+                Log.i("wutao--> ", "网络请求异常: $it")
                 showNetErrorPic(true)
             }
 
@@ -64,7 +69,7 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
             }
 
             onComplete {
-                Log.i("wutao--> ", "onComplete: ")
+                Log.i("wutao--> ", "网络请求结束: ")
             }
         }
     }
