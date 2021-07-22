@@ -1,4 +1,4 @@
-package com.aisier.architecture.entity
+package com.aisier.architecture.net
 
 import com.aisier.architecture.util.toast
 import com.google.gson.JsonParseException
