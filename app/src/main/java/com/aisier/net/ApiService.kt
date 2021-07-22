@@ -7,10 +7,10 @@ import retrofit2.http.GET
 interface ApiService {
 
     @GET("wxarticle/chapters/json")
-    suspend fun getWxArticleV2(): BaseResponse<List<WxArticleBean>>
+    suspend fun getWxArticle(): BaseResponse<List<WxArticleBean>>
 
     @GET("abc/chapters/json")
-    suspend fun getWxArticleErrorV2(): BaseResponse<List<WxArticleBean>>
+    suspend fun getWxArticleError(): BaseResponse<List<WxArticleBean>>
 
     companion object {
         const val BASE_URL = "https://wanandroid.com/"

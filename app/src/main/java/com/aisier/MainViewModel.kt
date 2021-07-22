@@ -25,19 +25,19 @@ class MainViewModel : BaseViewModel() {
 
     fun requestNet() {
         viewModelScope.launch {
-            repository.fetchWxArticleV2(wxArticleLiveData)
+            repository.fetchWxArticle(wxArticleLiveData)
         }
     }
 
     fun requestNetError() {
         viewModelScope.launch {
-            repository.fetchWxArticleErrorV2(wxArticleLiveData)
+            repository.fetchWxArticleError(wxArticleLiveData)
         }
     }
 
     fun requestNetWithLoading() {
         viewModelScope.launch {
-            repository.fetchWxArticleV2(wxArticleLoadingLiveData)
+            repository.fetchWxArticle(wxArticleLoadingLiveData)
         }
     }
 }

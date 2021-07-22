@@ -51,6 +51,10 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
                 mBinding.tvContent.text = data?.toString()
             }
 
+            onEmpty {
+                Log.i("wutao--> ", "空布局: ")
+            }
+
             onFailed {
                 Log.i("wutao--> ", "后台返回的errorCode: $it")
             }

@@ -6,16 +6,14 @@ import com.aisier.bean.WxArticleBean
 
 class WxArticleRepository : BaseRepository() {
 
-    private val mService by lazy {
-        RetrofitClient.service
+    private val mService by lazy { RetrofitClient.service }
+
+    suspend fun fetchWxArticle(stateLiveData: StateLiveData<List<WxArticleBean>>) {
+        executeResp(stateLiveData, mService::getWxArticle)
     }
 
-    suspend fun fetchWxArticleV2(stateLiveData: StateLiveData<List<WxArticleBean>>) {
-        executeResp(stateLiveData, mService::getWxArticleV2)
-    }
-
-    suspend fun fetchWxArticleErrorV2(stateLiveData: StateLiveData<List<WxArticleBean>>) {
-        executeResp(stateLiveData, mService::getWxArticleErrorV2)
+    suspend fun fetchWxArticleError(stateLiveData: StateLiveData<List<WxArticleBean>>) {
+        executeResp(stateLiveData, mService::getWxArticleError)
     }
 
 }
