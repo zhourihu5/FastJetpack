@@ -8,13 +8,18 @@ import com.aisier.architecture.entity.IBaseResponse
 abstract class IStateObserver<T>(private val uiView: IUiView? = null) : Observer<IBaseResponse<T>> {
 
     override fun onChanged(t: IBaseResponse<T>) {
+        if (t.dataState == DataState.STATE_LOADING) {
+            onShowLoading()
+            return
+        }
         when (t.dataState) {
-            DataState.STATE_LOADING -> onShowLoading()
             DataState.STATE_SUCCESS -> onSuccess(t.httpData)
             DataState.STATE_EMPTY -> onDataEmpty()
             DataState.STATE_FAILED -> onFailed(t.httpCode)
-            DataState.STATE_ERROR -> t.error?.let { onError(it) }
+            DataState.STATE_ERROR -> onError(t.error)
+            else -> Unit
         }
+        uiView?.dismissLoading()
         onComplete()
     }
 
@@ -24,9 +29,7 @@ abstract class IStateObserver<T>(private val uiView: IUiView? = null) : Observer
 
     open fun onShowLoading() = uiView?.showLoading()
 
-    open fun onDismissLoading() = uiView?.dismissLoading()
-
-    abstract fun onError(e: Throwable?)
+    abstract fun onError(e: Throwable)
 
     abstract fun onComplete()
 

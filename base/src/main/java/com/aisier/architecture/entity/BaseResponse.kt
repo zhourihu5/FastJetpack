@@ -20,7 +20,7 @@ class BaseResponse<T> : IBaseResponse<T> {
 
     override var dataState: DataState? = null
 
-    override var error: Throwable? = null
+    override lateinit var error: Throwable
 
     private val data: T? = null
 }

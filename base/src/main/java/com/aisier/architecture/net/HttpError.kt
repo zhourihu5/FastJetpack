@@ -21,16 +21,17 @@ fun handlingApiExceptions(code: Int, errorMsg: String?) = when (code) {
 /**
  * 处理请求层的错误,对可能的已知的错误进行处理
  */
-fun handlingExceptions(e: Throwable) = when (e) {
-    is HttpException -> {
-        toast(e.message())
-    }
-    is CancellationException -> {
-    }
-    is SocketTimeoutException -> {
-    }
-    is JsonParseException -> {
-    }
-    else -> {
+fun handlingExceptions(e: Throwable) {
+    return when (e) {
+        is HttpException -> {
+        }
+        is CancellationException -> {
+        }
+        is SocketTimeoutException -> {
+        }
+        is JsonParseException -> {
+        }
+        else -> {
+        }
     }
 }

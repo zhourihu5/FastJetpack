@@ -19,7 +19,7 @@ open class BaseRepository {
         var baseResp: IBaseResponse<T> = BaseResponse()
         stateLiveData.postLoading(baseResp)
         //for test
-        delay(1000)
+        delay(500)
         runCatching {
             baseResp = block.invoke()
         }.onSuccess {

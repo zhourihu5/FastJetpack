@@ -7,10 +7,9 @@ import androidx.core.view.isVisible
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.aisier.R
 import com.aisier.architecture.base.BaseActivity
-import com.aisier.architecture.util.startActivity
+import com.aisier.architecture.util.toast
 import com.aisier.bean.WxArticleBean
 import com.aisier.databinding.ActivityMainBinding
-import com.aisier.util.TimerShareLiveData
 import com.aisier.vm.MainViewModel
 
 class MainActivity : BaseActivity(R.layout.activity_main) {
@@ -21,13 +20,6 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
     override fun init() {
         initData()
         initObserver()
-        initGlobalObserver()
-    }
-
-    private fun initGlobalObserver() {
-        TimerShareLiveData.get().observe(this) {
-            Log.i("wutao--> ", "MainActivity: $it")
-        }
     }
 
     private fun initObserver() {
@@ -54,6 +46,7 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
 
             onException {
                 Log.i("wutao--> ", "网络请求异常: $it")
+                toast(it.message.toString())
                 showNetErrorPic(true)
             }
 
@@ -61,11 +54,8 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
                 showLoading()
             }
 
-            onDismissLoading {
-                dismissLoading()
-            }
-
             onComplete {
+                dismissLoading()
                 Log.i("wutao--> ", "网络请求结束: ")
             }
         }
@@ -81,6 +71,5 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
         mBinding.btnNet.setOnClickListener { mViewModel.requestNet() }
         mBinding.btnNetError1.setOnClickListener { mViewModel.requestNetError() }
         mBinding.btnNetWithLoading.setOnClickListener { mViewModel.requestNetWithLoading() }
-        mBinding.goSecondActivity.setOnClickListener { startActivity<SecondActivity>() }
     }
 }

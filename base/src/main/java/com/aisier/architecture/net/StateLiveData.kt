@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import com.aisier.architecture.base.IUiView
 import com.aisier.architecture.entity.DataState
 import com.aisier.architecture.entity.IBaseResponse
-import com.aisier.architecture.util.toast
 
 /**
  * <pre>
@@ -39,20 +38,12 @@ class StateLiveData<T> : MutableLiveData<IBaseResponse<T>>() {
                 }
             }
 
-            override fun onDismissLoading() {
-                if (listener.mDismissLoadingListenerAction != null) {
-                    listener.mDismissLoadingListenerAction?.invoke()
-                } else {
-                    super.onDismissLoading()
-                }
-            }
-
             override fun onSuccess(data: T?) {
                 listener.mSuccessListenerAction?.invoke(data)
             }
 
-            override fun onError(e: Throwable?) {
-                listener.mErrorListenerAction?.invoke(e) ?: toast("Http Error")
+            override fun onError(e: Throwable) {
+                listener.mErrorListenerAction?.invoke(e)
             }
 
             override fun onDataEmpty() {
@@ -74,8 +65,7 @@ class StateLiveData<T> : MutableLiveData<IBaseResponse<T>>() {
     inner class ListenerBuilder {
         internal var mSuccessListenerAction: ((T?) -> Unit)? = null
         internal var mShowLoadingListenerAction: (() -> Unit)? = null
-        internal var mDismissLoadingListenerAction: (() -> Unit)? = null
-        internal var mErrorListenerAction: ((Throwable?) -> Unit)? = null
+        internal var mErrorListenerAction: ((Throwable) -> Unit)? = null
         internal var mEmptyListenerAction: (() -> Unit)? = null
         internal var mCompleteListenerAction: (() -> Unit)? = null
         internal var mFailedListenerAction: ((Int) -> Unit)? = null
@@ -88,11 +78,7 @@ class StateLiveData<T> : MutableLiveData<IBaseResponse<T>>() {
             mShowLoadingListenerAction = action
         }
 
-        fun onDismissLoading(action: () -> Unit) {
-            mDismissLoadingListenerAction = action
-        }
-
-        fun onException(action: (Throwable?) -> Unit) {
+        fun onException(action: (Throwable) -> Unit) {
             mErrorListenerAction = action
         }
 

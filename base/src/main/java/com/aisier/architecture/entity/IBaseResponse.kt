@@ -14,7 +14,7 @@ interface IBaseResponse<Data> : Serializable {
 
     var dataState: DataState?
 
-    var error: Throwable?
+    var error: Throwable
 
     val isFailed: Boolean
         get() = !isSuccess
