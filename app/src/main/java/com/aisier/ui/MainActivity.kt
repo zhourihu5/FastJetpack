@@ -8,12 +8,10 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.aisier.R
 import com.aisier.architecture.base.BaseActivity
 import com.aisier.architecture.util.startActivity
-import com.aisier.architecture.util.toast
 import com.aisier.bean.WxArticleBean
 import com.aisier.databinding.ActivityMainBinding
 import com.aisier.util.TimerShareLiveData
 import com.aisier.vm.MainViewModel
-import com.aisier.vm.ShareViewModel
 
 class MainActivity : BaseActivity(R.layout.activity_main) {
 
@@ -27,10 +25,6 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
     }
 
     private fun initGlobalObserver() {
-        getAppViewModelProvider().get(ShareViewModel::class.java).msgLiveData.observe(this) {
-            toast("我是第二个页面的消息")
-        }
-
         TimerShareLiveData.get().observe(this) {
             Log.i("wutao--> ", "MainActivity: $it")
         }
