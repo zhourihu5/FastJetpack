@@ -3,8 +3,7 @@ package com.aisier.architecture.net
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import com.aisier.architecture.base.IUiView
-import com.aisier.architecture.entity.DataState
-import com.aisier.architecture.entity.IBaseResponse
+import com.aisier.architecture.entity.ApiResponse
 
 /**
  * <pre>
@@ -15,17 +14,7 @@ import com.aisier.architecture.entity.IBaseResponse
  * version: 1.0
 </pre> *
  */
-class StateLiveData<T> : MutableLiveData<IBaseResponse<T>>() {
-
-    fun postLoading(baseResp: IBaseResponse<T>) {
-        baseResp.dataState = DataState.STATE_LOADING
-        postValue(baseResp)
-    }
-
-    fun setError(baseResp: IBaseResponse<T>, error: Throwable) {
-        baseResp.dataState = DataState.STATE_ERROR
-        baseResp.error = error
-    }
+class StateLiveData<T> : MutableLiveData<ApiResponse<T>>() {
 
     fun observeState(owner: LifecycleOwner, isShowLoading: IUiView? = null, listenerBuilder: ListenerBuilder.() -> Unit) {
         val listener = ListenerBuilder().also(listenerBuilder)
@@ -38,7 +27,7 @@ class StateLiveData<T> : MutableLiveData<IBaseResponse<T>>() {
                 }
             }
 
-            override fun onSuccess(data: T?) {
+            override fun onSuccess(data: T) {
                 listener.mSuccessListenerAction?.invoke(data)
             }
 
@@ -63,14 +52,14 @@ class StateLiveData<T> : MutableLiveData<IBaseResponse<T>>() {
     }
 
     inner class ListenerBuilder {
-        internal var mSuccessListenerAction: ((T?) -> Unit)? = null
+        internal var mSuccessListenerAction: ((T) -> Unit)? = null
         internal var mShowLoadingListenerAction: (() -> Unit)? = null
         internal var mErrorListenerAction: ((Throwable) -> Unit)? = null
         internal var mEmptyListenerAction: (() -> Unit)? = null
         internal var mCompleteListenerAction: (() -> Unit)? = null
         internal var mFailedListenerAction: ((Int) -> Unit)? = null
 
-        fun onSuccess(action: (T?) -> Unit) {
+        fun onSuccess(action: (T) -> Unit) {
             mSuccessListenerAction = action
         }
 

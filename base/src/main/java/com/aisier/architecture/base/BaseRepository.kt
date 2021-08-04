@@ -1,8 +1,6 @@
 package com.aisier.architecture.base
 
-import com.aisier.architecture.entity.BaseResponse
-import com.aisier.architecture.entity.DataState
-import com.aisier.architecture.entity.IBaseResponse
+import com.aisier.architecture.entity.*
 import com.aisier.architecture.net.StateLiveData
 import com.aisier.architecture.net.handlingApiExceptions
 import com.aisier.architecture.net.handlingExceptions
@@ -15,19 +13,19 @@ open class BaseRepository {
      * @param block api的请求方法
      * @param stateLiveData 每个请求传入相应的LiveData，主要负责网络状态的监听
      */
-    suspend fun <T : Any> executeResp(stateLiveData: StateLiveData<T>, block: suspend () -> IBaseResponse<T>) {
-        var baseResp: IBaseResponse<T> = BaseResponse()
-        stateLiveData.postLoading(baseResp)
+    suspend fun <T : Any> executeResp(stateLiveData: StateLiveData<T>, block: suspend () -> ApiResponse<T>) {
+        var baseResp: ApiResponse<T> = ApiResponse()
+        stateLiveData.postValue(ApiLoadingResponse())
         //for test
         delay(500)
         runCatching {
             baseResp = block.invoke()
         }.onSuccess {
-            handleHttpOkResponse(baseResp)
+            baseResp = handleHttpOkResponse(baseResp)
         }.onFailure { e ->
             e.printStackTrace()
             //非后台返回错误，捕获到的异常
-            stateLiveData.setError(baseResp, e)
+            baseResp = ApiErrorResponse(e)
             handlingExceptions(e)
         }
         stateLiveData.postValue(baseResp)
@@ -36,18 +34,17 @@ open class BaseRepository {
     /**
      * Http 状态码200，请求成功，但是后台定义了一些错误码
      */
-    private fun <T : Any> handleHttpOkResponse(baseResp: IBaseResponse<T>) {
+    private fun <T : Any> handleHttpOkResponse(baseResp: ApiResponse<T>): ApiResponse<T> {
         if (baseResp.isSuccess) {
-            if (baseResp.httpData == null || baseResp.httpData is List<*> && (baseResp.httpData as List<*>).isEmpty()) {
+            return if (baseResp.data == null || baseResp.data is List<*> && (baseResp.data as List<*>).isEmpty()) {
                 //TODO: 数据为空,结构变化时需要修改判空条件
-                baseResp.dataState = DataState.STATE_EMPTY
+                ApiEmptyResponse()
             } else {
-                baseResp.dataState = DataState.STATE_SUCCESS
+                ApiSuccessResponse(baseResp.data!!)
             }
-        } else {
-            handlingApiExceptions(baseResp.httpCode, baseResp.httpMsg)
-            baseResp.dataState = DataState.STATE_FAILED
         }
+        handlingApiExceptions(baseResp.errorCode, baseResp.errorMsg)
+        return ApiFailedResponse(baseResp.errorCode, baseResp.errorMsg)
     }
 
 
