@@ -12,7 +12,6 @@ inline fun Fragment.requestPermission(
     crossinline explained: (permission: String) -> Unit = {}
 
 ) {
-
     registerForActivityResult(ActivityResultContracts.RequestPermission()) { result: Boolean ->
         when {
             result -> granted.invoke(permission)
