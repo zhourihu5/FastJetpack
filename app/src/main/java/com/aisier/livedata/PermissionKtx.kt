@@ -13,7 +13,6 @@ inline fun Fragment.requestPermission(
 
 ) {
 
-
     registerForActivityResult(ActivityResultContracts.RequestPermission()) { result: Boolean ->
         when {
             result -> granted.invoke(permission)
